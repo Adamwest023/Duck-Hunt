@@ -15,7 +15,7 @@ target_images = [[], [], []]
 targets = {1: [10, 5, 3],
            2: [12, 8, 5],
            3: [15, 12, 8, 3]}
-level = 2
+level = 3
 # for loop to loop levels with banners and guns
 for i in range(1, 4):
     bgs.append(pygame.image.load(f'assets/bgs/{i}.png'))
@@ -69,9 +69,9 @@ def move_level(coords):
         for j in range(len(coords[i])):
             my_coords = coords[i][j]
             if my_coords[0] < -150:
-                coords[i][j] = (WIDTH, my_coords[i])
+                coords[i][j] = (WIDTH, my_coords[1])
             else:
-                coords[i][j] = (my_coords[0] - 2**i, my_coords[i])
+                coords[i][j] = (my_coords[0] - 2**i, my_coords[1])
     return coords
 
 
@@ -83,8 +83,8 @@ def draw_level(coords):
 
     for i in range(len(coords)):
         for j in range(len(coords[i])):
-            target_rects[i].append(pygame.rect.Rect((
-                coords[i][j][0] + 20, coords[i][j][1]), (60-i*12, 60 - i*12)))
+            target_rects[i].append(pygame.rect.Rect((coords[i][j][0] + 20, coords[i][j][1]),
+                                                    (60-i*12, 60 - i*12)))
             screen.blit(target_images[level-1][i], coords[i][j])
     return target_rects
 
