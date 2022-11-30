@@ -29,10 +29,12 @@ counter = 1
 best_freeplay = 0
 best_ammo = 0
 best_timed = 0
-shot = False
+shot = False 
 menu = True
 game_over = False
 pause = False
+clicked = False
+write_values = True
 menu_img = pygame.image.load(f'assets/menus/mainMenu.png')
 game_over_img = pygame.image.load(f'assets/menus/gameOver.png')
 pause_img = pygame.image.load(f'assets/menus/pause.png')
@@ -67,9 +69,8 @@ def draw_score():
     if mode == 1:
         mode_text = font.render(f"Ammo Remaining: {ammo}", True, 'black')
     if mode == 2:
-        mode_text = font.render(
-            f"Time Remaining: {time_remaining}", True, 'black')
-    screen.blit(points_text, (330, 741))
+        mode_text = font.render(wf"Time Remaining: {time_remaining}", True, 'black')
+    screen.blit(mode_text, (330, 741))
 
 # gun and gun animation function
 
@@ -151,6 +152,7 @@ def check_shot(targets, coords):
 
 def draw_menu():
     global game_over, pause, mode, level, menu, time_passed, total_shots, points, ammo
+    global time_remaining, clicked, best_freeplay, best_ammo, best_timed
     game_over = False
     pause = False
     # drawing rects and high scores
@@ -189,6 +191,11 @@ def draw_menu():
         time_passed = 0
         total_shots = 0
         points = 0
+    if reset_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
+        best_freeplay = 0
+        best_timed = 0
+        best_ammo = 0
+        write_values = False
 
 
 def draw_game_over():
