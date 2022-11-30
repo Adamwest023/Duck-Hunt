@@ -16,6 +16,7 @@ targets = {1: [10, 5, 3],
            2: [12, 8, 5],
            3: [15, 12, 8, 3]}
 level = 3
+points = 0
 # for loop to loop levels with banners and guns
 for i in range(1, 4):
     bgs.append(pygame.image.load(f'assets/bgs/{i}.png'))
@@ -87,6 +88,18 @@ def draw_level(coords):
                                                     (60-i*12, 60 - i*12)))
             screen.blit(target_images[level-1][i], coords[i][j])
     return target_rects
+
+
+def check_shot(targets, coords):
+    global points
+    mouse_pos = pygame.mouse.get_pos()
+    for i in range(len(targets)):
+        for j in range(len(targets[i])):
+            if targets[i][j].collidepoint(mouse_pos):
+                coords[i].pop(j)
+                points += 10 + 10 * (i**2)
+                #add sounds for enemy hit 
+    return coords
 
 
 # initialize enemy coordinates
