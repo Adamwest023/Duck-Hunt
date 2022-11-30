@@ -1,10 +1,10 @@
 import pygame
 import math
 
-pygame.init
+pygame.init()
 fps = 60
 timer = pygame.time.Clock()
-# font = pygame.font.Font('assets/font/myFont.ttf', 32)
+font = pygame.font.Font('assets/font/myFont.ttf', 32)
 WIDTH = 900
 HEIGHT = 800
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
@@ -38,6 +38,10 @@ for i in range(1, 4):
                 pygame.image.load(f'assets/targets/{i}/{j}.png'), (120 - (j*18), 80 - (j*12))))
 
 
+def draw_score():
+    points_text = font.render(f"Points: {points}", True, 'black')
+    screen.blit(points_text, (330,700))
+    
 def draw_gun():
     mouse_pos = pygame.mouse.get_pos()
     gun_point = (WIDTH/2, HEIGHT - 200)
@@ -158,6 +162,7 @@ while run:
 
     if level > 0:
         draw_gun()
+        draw_score()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
