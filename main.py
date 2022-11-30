@@ -21,6 +21,9 @@ total_shots = 0
 # 0 =freeplay, 1 = accuracy, 2 = timed
 mode = 0
 ammo = 0
+time_passed = 0
+time_remaining = 0
+counter = 1
 shot = False
 # for loop to loop levels with banners and guns
 for i in range(1, 4):
@@ -40,8 +43,21 @@ for i in range(1, 4):
 
 def draw_score():
     points_text = font.render(f"Points: {points}", True, 'black')
-    screen.blit(points_text, (330,700))
-    
+    screen.blit(points_text, (330, 660))
+    shots_text = font.render(f"Total Shots: {total_shots}", True, 'black')
+    screen.blit(shots_text, (330, 687))
+    time_text = font.render(f"Time Elapsed: {time_passed}", True, 'black')
+    screen.blit(time_text, (330, 714))
+    if mode == 0:
+        mode_text = font.render(f"Freeplay!", True, 'black')
+    if mode == 1:
+        mode_text = font.render(f"Ammo Remaining: {ammo}", True, 'black')
+    if mode == 2:
+        mode_text = font.render(
+            f"Time Remaining: {time_remaining}", True, 'black')
+    screen.blit(points_text, (330, 741))
+
+
 def draw_gun():
     mouse_pos = pygame.mouse.get_pos()
     gun_point = (WIDTH/2, HEIGHT - 200)
@@ -136,6 +152,14 @@ for i in range(3):
 run = True
 while run:
     timer.tick(fps)
+    if level != 0:
+        if counter < 60:
+            counter += 1
+        else:
+            counter = 1
+            time_passed += 1
+            if mode == 2:
+                time_remaining -= 1
 
     screen.fill('black')
     screen.blit(bgs[level - 1], (0, 0))
@@ -175,9 +199,8 @@ while run:
                 if mode == 1:
                     ammo -= 1
     if level > 0:
-        if target_boxes == [[],[],[]] and level < 3:
+        if target_boxes == [[], [], []] and level < 3:
             level += 1
-            
 
     pygame.display.flip()
 pygame.quit()
