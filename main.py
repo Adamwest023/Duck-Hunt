@@ -3,7 +3,7 @@ import math
 
 pygame.init()
 
-#game variables
+# game variables
 fps = 60
 timer = pygame.time.Clock()
 font = pygame.font.Font('assets/font/myFont.ttf', 32)
@@ -71,7 +71,9 @@ def draw_score():
             f"Time Remaining: {time_remaining}", True, 'black')
     screen.blit(points_text, (330, 741))
 
-#gun and gun animation function
+# gun and gun animation function
+
+
 def draw_gun():
     mouse_pos = pygame.mouse.get_pos()
     gun_point = (WIDTH/2, HEIGHT - 200)
@@ -100,6 +102,8 @@ def draw_gun():
                 pygame.draw.circle(screen, lasers[level-1], mouse_pos, 5)
 
 # Function to move through the levels
+
+
 def move_level(coords):
     if level == 1 or level == 2:
         max_val = 3
@@ -114,7 +118,9 @@ def move_level(coords):
                 coords[i][j] = (my_coords[0] - 2**i, my_coords[1])
     return coords
 
-# Draws enemies onto level 
+# Draws enemies onto level
+
+
 def draw_level(coords):
     if level == 1 or level == 2:
         target_rects = [[], [], []]
@@ -128,7 +134,9 @@ def draw_level(coords):
             screen.blit(target_images[level-1][i], coords[i][j])
     return target_rects
 
-# Collision detection with mouse click 
+# Collision detection with mouse click
+
+
 def check_shot(targets, coords):
     global points
     mouse_pos = pygame.mouse.get_pos()
@@ -140,25 +148,56 @@ def check_shot(targets, coords):
                 # add sounds for enemy hit
     return coords
 
+
 def draw_menu():
-    global game_over, pause
-    game_over = False 
+    global game_over, pause, mode, level, menu, time_passed, total_shots, points, ammo
+    game_over = False
     pause = False
-    screen.blit(menu_img,(0,0))
+    # drawing rects and high scores
+    screen.blit(menu_img, (0, 0))
     mouse_pos = pygame.mouse.get_pos()
     clicks = pygame.mouse.get_pressed()
-    freeplay_button = pygame.rect.Rect((170,524),(260,100))
-    screen.blit(font.render(f'{best_freeplay}', True, 'black'), (340,580))
-    ammo_button = pygame.rect.Rect((475,524),(260,100))
-    screen.blit(font.render(f'{best_ammo}', True, 'black'), (340,580))
-    timed_button = pygame.rect.Rect((170,661),(260,100))
-    screen.blit(font.render(f'{best_timed}', True, 'black'), (340,580))
-    reset_button = pygame.rect.Rect((475,661),(260,100))
+    freeplay_button = pygame.rect.Rect((170, 524), (260, 100))
+    screen.blit(font.render(f'{best_freeplay}', True, 'black'), (340, 580))
+    ammo_button = pygame.rect.Rect((475, 524), (260, 100))
+    screen.blit(font.render(f'{best_ammo}', True, 'black'), (650, 580))
+    timed_button = pygame.rect.Rect((170, 661), (260, 100))
+    screen.blit(font.render(f'{best_timed}', True, 'black'), (350, 710))
+    reset_button = pygame.rect.Rect((475, 661), (260, 100))
+
+    # Menu selection
+    if freeplay_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
+        mode = 1
+        level = 1
+        menu = False
+        time_passed = 0
+        total_shots = 0
+        points = 0
+    if ammo_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
+        mode = 1
+        level = 1
+        menu = False
+        time_passed = 0
+        total_shots = 0
+        points = 0
+        ammo = 81
+    if timed_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
+        mode = 1
+        level = 1
+        menu = False
+        time_remaining = 30
+        time_passed = 0
+        total_shots = 0
+        points = 0
+
 
 def draw_game_over():
     pass
+
+
 def draw_pause():
     pass
+
 
 # initialize enemy coordinates
 one_coords = [[], [], []]
@@ -197,7 +236,7 @@ while run:
     screen.fill('black')
     screen.blit(bgs[level - 1], (0, 0))
     screen.blit(banners[level - 1], (0, HEIGHT-200))
-    
+
     # create our menu setting
     if menu:
         level = 0
@@ -208,8 +247,8 @@ while run:
     if pause:
         level = 0
         draw_pause()
-    
-    # add correct level settings to each level 
+
+    # add correct level settings to each level
     if level == 1:
         target_boxes = draw_level(one_coords)
         one_coords = move_level(one_coords)
