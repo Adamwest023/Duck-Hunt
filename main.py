@@ -29,7 +29,7 @@ counter = 1
 best_freeplay = 0
 best_ammo = 0
 best_timed = 0
-shot = False 
+shot = False
 menu = True
 game_over = False
 pause = False
@@ -69,7 +69,8 @@ def draw_score():
     if mode == 1:
         mode_text = font.render(f"Ammo Remaining: {ammo}", True, 'black')
     if mode == 2:
-        mode_text = font.render(f"Time Remaining: {time_remaining}", True, 'black')
+        mode_text = font.render(
+            f"Time Remaining: {time_remaining}", True, 'black')
     screen.blit(mode_text, (330, 741))
 
 # gun and gun animation function
@@ -185,7 +186,7 @@ def draw_menu():
         points = 0
         ammo = 81
         clicked = True
-        
+
     if timed_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
         mode = 1
         level = 1
@@ -195,14 +196,13 @@ def draw_menu():
         total_shots = 0
         points = 0
         clicked = True
-        
+
     if reset_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
         best_freeplay = 0
         best_timed = 0
         best_ammo = 0
         write_values = False
         clicked = True
-        
 
 
 def draw_game_over():
@@ -210,7 +210,25 @@ def draw_game_over():
 
 
 def draw_pause():
-    pass
+    global level, pause, menu,total_shots,points, time_passed, time_remaining,clicked
+    screen.blit(pause_img, (0, 0))
+    mouse_pos = pygame.mouse.get_pos()
+    clicks = pygame.mouse.get_pressed()
+    resume_button = pygame.rect.Rect((170, 661), (260, 100))
+    menu_button = pygame.rect.Rect((475, 661), (260, 100))
+    if resume_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
+        level = resume_level 
+        pause = False
+        clicked = True
+    if menu_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
+        level = 0
+        pause = False
+        menu = True
+        points = 0
+        total_shots = 0
+        time_passed = 0
+        time_remaining = 0
+        clicked = True
 
 
 # initialize enemy coordinates
@@ -299,17 +317,16 @@ while run:
                 if mode == 1:
                     ammo -= 1
             if (670 < mouse_position[0] < 860) and (660 < mouse_position[1] < 725):
-                resume_level = level 
+                resume_level = level
                 pause = True
                 clicked = True
             if (670 < mouse_position[0] < 860) and (715 < mouse_position[1] < 760):
                 menu: True
                 clicked = True
-            
-                    
-        if event.type == pygame.MOUSEBUTTONUP and event.button ==1 and clicked:
+
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1 and clicked:
             clicked = False
-             
+
     if level > 0:
         if target_boxes == [[], [], []] and level < 3:
             level += 1
