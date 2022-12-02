@@ -60,6 +60,12 @@ for i in range(1, 4):
             target_images[i-1].append(pygame.transform.scale(
                 pygame.image.load(f'assets/targets/{i}/{j}.png'), (120 - (j*18), 80 - (j*12))))
 
+file = open('high_scores.txt', 'r')
+read_file = file.readlines()
+file.close()
+best_freeplay = int(read_file[0])
+best_ammo = int(read_file[1])
+best_timed = int(read_file[2])
 
 # Score and time function
 def draw_score():
@@ -376,6 +382,10 @@ while run:
                     best_timed = points
                     write_values = True
             game_over = True
-
+    if write_values:
+        file = open('high_scores.txt', 'w')
+        file.write(f'{best_freeplay}\n{best_ammo}\n{best_timed}')
+        file.close()
+        write_values = False
     pygame.display.flip()
 pygame.quit()
