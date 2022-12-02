@@ -17,9 +17,6 @@ target_images = [[], [], []]
 targets = {1: [10, 5, 3],
            2: [12, 8, 5],
            3: [15, 12, 8, 3]}
-one_coords = [[], [], []]
-two_coords = [[], [], []]
-three_coords = [[], [], [], []]
 level = 0
 points = 0
 total_shots = 0
@@ -37,8 +34,11 @@ menu = True
 game_over = False
 pause = False
 clicked = False
-write_values = True
-new_coords = False
+write_values = False
+new_coords = True
+one_coords = [[], [], []]
+two_coords = [[], [], []]
+three_coords = [[], [], [], []]
 menu_img = pygame.image.load(f'assets/menus/mainMenu.png')
 game_over_img = pygame.image.load(f'assets/menus/gameOver.png')
 pause_img = pygame.image.load(f'assets/menus/pause.png')
@@ -78,8 +78,6 @@ def draw_score():
     screen.blit(mode_text, (330, 741))
 
 # gun and gun animation function
-
-
 def draw_gun():
     mouse_pos = pygame.mouse.get_pos()
     gun_point = (WIDTH/2, HEIGHT - 200)
@@ -132,7 +130,6 @@ def draw_level(coords):
         target_rects = [[], [], []]
     else:
         target_rects = [[], [], [], []]
-
     for i in range(len(coords)):
         for j in range(len(coords[i])):
             target_rects[i].append(pygame.rect.Rect((coords[i][j][0] + 20, coords[i][j][1]),
@@ -157,7 +154,7 @@ def check_shot(targets, coords):
 
 def draw_menu():
     global game_over, pause, mode, level, menu, time_passed, total_shots, points, ammo
-    global time_remaining, clicked, best_freeplay, best_ammo, best_timed,new_coords,write_values
+    global time_remaining, clicked, best_freeplay, best_ammo, best_timed, new_coords, write_values
     game_over = False
     pause = False
     # drawing rects and high scores
@@ -174,7 +171,7 @@ def draw_menu():
 
     # Menu selection
     if freeplay_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
-        mode = 1
+        mode = 0
         level = 1
         menu = False
         time_passed = 0
@@ -194,7 +191,7 @@ def draw_menu():
         new_coords = True
 
     if timed_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
-        mode = 1
+        mode = 2
         level = 1
         menu = False
         time_remaining = 30
@@ -203,15 +200,13 @@ def draw_menu():
         points = 0
         clicked = True
         new_coords = True
-        
 
     if reset_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
         best_freeplay = 0
         best_timed = 0
         best_ammo = 0
-        write_values = False
+        write_values = True
         clicked = True
- 
 
 
 def draw_game_over():
@@ -219,14 +214,14 @@ def draw_game_over():
 
 
 def draw_pause():
-    global level, pause, menu,total_shots,points, time_passed, time_remaining,clicked
+    global level, pause, menu, total_shots, points, time_passed, time_remaining, clicked, new_coords
     screen.blit(pause_img, (0, 0))
     mouse_pos = pygame.mouse.get_pos()
     clicks = pygame.mouse.get_pressed()
     resume_button = pygame.rect.Rect((170, 661), (260, 100))
     menu_button = pygame.rect.Rect((475, 661), (260, 100))
     if resume_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
-        level = resume_level 
+        level = resume_level
         pause = False
         clicked = True
     if menu_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
@@ -238,9 +233,7 @@ def draw_pause():
         time_passed = 0
         time_remaining = 0
         clicked = True
-
-
-
+        new_coords = True
 
 
 run = True
@@ -270,14 +263,12 @@ while run:
             for j in range(my_list[i]):
                 two_coords[i].append(
                     (WIDTH//(my_list[i]) * j, 300 - (i * 150)+30 * (j % 2)))
-        for i in range(3):
+        for i in range(4):
             my_list = targets[3]
             for j in range(my_list[i]):
                 three_coords[i].append(
                     (WIDTH//(my_list[i]) * j, 300 - (i * 100)+30 * (j % 2)))
         new_coords = False
-        
-        
 
     screen.fill('black')
     screen.blit(bgs[level - 1], (0, 0))
@@ -337,7 +328,7 @@ while run:
             if (670 < mouse_position[0] < 860) and (715 < mouse_position[1] < 760):
                 menu: True
                 clicked = True
-
+                new_coords = True
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1 and clicked:
             clicked = False
 
