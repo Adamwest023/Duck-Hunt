@@ -17,6 +17,9 @@ target_images = [[], [], []]
 targets = {1: [10, 5, 3],
            2: [12, 8, 5],
            3: [15, 12, 8, 3]}
+one_coords = [[], [], []]
+two_coords = [[], [], []]
+three_coords = [[], [], [], []]
 level = 0
 points = 0
 total_shots = 0
@@ -35,6 +38,7 @@ game_over = False
 pause = False
 clicked = False
 write_values = True
+new_coords = False
 menu_img = pygame.image.load(f'assets/menus/mainMenu.png')
 game_over_img = pygame.image.load(f'assets/menus/gameOver.png')
 pause_img = pygame.image.load(f'assets/menus/pause.png')
@@ -153,7 +157,7 @@ def check_shot(targets, coords):
 
 def draw_menu():
     global game_over, pause, mode, level, menu, time_passed, total_shots, points, ammo
-    global time_remaining, clicked, best_freeplay, best_ammo, best_timed
+    global time_remaining, clicked, best_freeplay, best_ammo, best_timed,new_coords,write_values
     game_over = False
     pause = False
     # drawing rects and high scores
@@ -177,6 +181,7 @@ def draw_menu():
         total_shots = 0
         points = 0
         clicked = True
+        new_coords = True
     if ammo_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
         mode = 1
         level = 1
@@ -186,6 +191,7 @@ def draw_menu():
         points = 0
         ammo = 81
         clicked = True
+        new_coords = True
 
     if timed_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
         mode = 1
@@ -196,6 +202,8 @@ def draw_menu():
         total_shots = 0
         points = 0
         clicked = True
+        new_coords = True
+        
 
     if reset_button.collidepoint(mouse_pos) and clicks[0] and not clicked:
         best_freeplay = 0
@@ -203,6 +211,7 @@ def draw_menu():
         best_ammo = 0
         write_values = False
         clicked = True
+ 
 
 
 def draw_game_over():
@@ -231,26 +240,7 @@ def draw_pause():
         clicked = True
 
 
-# initialize enemy coordinates
-one_coords = [[], [], []]
-two_coords = [[], [], []]
-three_coords = [[], [], [], []]
-for i in range(3):
-    # getting coordinates for each enemy in our dictionary and adding slight randomization
-    my_list = targets[1]
-    for j in range(my_list[i]):
-        one_coords[i].append(
-            (WIDTH//(my_list[i]) * j, 300 - (i * 150)+30 * (j % 2)))
-for i in range(3):
-    my_list = targets[2]
-    for j in range(my_list[i]):
-        two_coords[i].append(
-            (WIDTH//(my_list[i]) * j, 300 - (i * 150)+30 * (j % 2)))
-for i in range(3):
-    my_list = targets[3]
-    for j in range(my_list[i]):
-        three_coords[i].append(
-            (WIDTH//(my_list[i]) * j, 300 - (i * 100)+30 * (j % 2)))
+
 
 
 run = True
@@ -264,6 +254,30 @@ while run:
             time_passed += 1
             if mode == 2:
                 time_remaining -= 1
+    if new_coords:
+        # initialize enemy coordinates
+        one_coords = [[], [], []]
+        two_coords = [[], [], []]
+        three_coords = [[], [], [], []]
+        for i in range(3):
+            # getting coordinates for each enemy in our dictionary and adding slight randomization
+            my_list = targets[1]
+            for j in range(my_list[i]):
+                one_coords[i].append(
+                    (WIDTH//(my_list[i]) * j, 300 - (i * 150)+30 * (j % 2)))
+        for i in range(3):
+            my_list = targets[2]
+            for j in range(my_list[i]):
+                two_coords[i].append(
+                    (WIDTH//(my_list[i]) * j, 300 - (i * 150)+30 * (j % 2)))
+        for i in range(3):
+            my_list = targets[3]
+            for j in range(my_list[i]):
+                three_coords[i].append(
+                    (WIDTH//(my_list[i]) * j, 300 - (i * 100)+30 * (j % 2)))
+        new_coords = False
+        
+        
 
     screen.fill('black')
     screen.blit(bgs[level - 1], (0, 0))
