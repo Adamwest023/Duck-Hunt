@@ -159,8 +159,6 @@ def draw_level(coords):
     return target_rects
 
 # Collision detection with mouse click
-
-
 def check_shot(targets, coords):
     global points
     mouse_pos = pygame.mouse.get_pos()
